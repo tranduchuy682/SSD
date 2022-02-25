@@ -16,14 +16,15 @@ n_classes = len(label_map)  # number of different types of objects
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Learning parameters
-checkpoint = 'checkpoint_ssd300.pth.tar' #None  # path to model checkpoint, None if none
-batch_size = 8  # batch size
+# checkpoint = 'checkpoint_ssd300.pth.tar' #None  # path to model checkpoint, None if none
+checkpoint = None  # path to model checkpoint, None if none
+batch_size = 32 #8  # batch size
 iterations = 120000  # number of iterations to train
 workers = 4  # number of workers for loading data in the DataLoader
 print_freq = 200  # print training status every __ batches
 lr = 1e-3  # learning rate
 decay_lr_at = [80000, 100000]  # decay learning rate after these many iterations
-decay_lr_to = 0.1  # decay learning rate to this fraction of the existing learning rate
+decay_lr_to =  0.3 #0.1  # decay learning rate to this fraction of the existing learning rate
 momentum = 0.9  # momentum
 weight_decay = 5e-4  # weight decay
 grad_clip = None  # clip if gradients are exploding, which may happen at larger batch sizes (sometimes at 32) - you will recognize it by a sorting error in the MuliBox loss calculation
