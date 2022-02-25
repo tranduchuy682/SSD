@@ -139,7 +139,7 @@ rev_label_map = {v: k for k, v in label_map.items()}  # Inverse mapping
 
 # Color map for bounding boxes of detected objects from https://sashat.me/2017/01/11/list-of-20-simple-distinct-colors/
 distinct_colors = ['#e6194b', '#3cb44b', '#ffe119', '#0082c8', '#f58231']
-
+label_color_map = {k: distinct_colors[i] for i, k in enumerate(label_map.keys())}
 def create_data_lists(file_path, output_folder):
     file_path = os.path.abspath(file_path)
     train_df = pd.read_csv(f"{file_path}/bbox.csv")
