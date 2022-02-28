@@ -1,4 +1,3 @@
-[README.md from https://github.com/GivralNguyen/learn_computer_vision/tree/main/pytorch/object_detection/SSD]
 
 
 
