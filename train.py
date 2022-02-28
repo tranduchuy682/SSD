@@ -40,6 +40,7 @@ def main():
 
     # Initialize model or load checkpoint
     if checkpoint is None:
+        _loss=[]
         start_epoch = 0
         model = SSD300(n_classes=n_classes)
         # Initialize the optimizer, with twice the default learning rate for biases, as in the original Caffe repo
@@ -60,6 +61,7 @@ def main():
         print('\nLoaded checkpoint from epoch %d.\n' % start_epoch)
         model = checkpoint['model']
         optimizer = checkpoint['optimizer']
+        _loss = checkpoint['_loss']
 
     # Move to default device
     model = model.to(device)
@@ -91,13 +93,13 @@ def main():
               model=model,
               criterion=criterion,
               optimizer=optimizer,
-              epoch=epoch)
+              epoch=epoch, _loss=_loss)
 
         # Save checkpoint
-        save_checkpoint(epoch, model, optimizer)
+        save_checkpoint(epoch, model, optimizer, _loss)
 
 
-def train(train_loader, model, criterion, optimizer, epoch):
+def train(train_loader, model, criterion, optimizer, epoch, _loss):
     """
     One epoch's training.
 
@@ -129,7 +131,7 @@ def train(train_loader, model, criterion, optimizer, epoch):
 
         # Loss
         loss = criterion(predicted_locs, predicted_scores, boxes, labels)  # scalar
-
+        _loss.append(loss)
         # Backward prop.
         optimizer.zero_grad()
         loss.backward()
