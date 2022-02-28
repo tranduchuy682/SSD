@@ -238,6 +238,75 @@ def create_data_lists(file_path, output_folder):
     with open(os.path.join(output_folder, 'TEST_objects.json'), 'w') as j:
         json.dump(test_objects, j ,cls=NumpyEncoder)
 
+def create_data_lists_split(file_path, output_folder):
+    file_path = os.path.abspath(file_path)
+    train_df = pd.read_csv(f"{file_path}/bbox.csv")
+
+    train_images = list()
+    train_objects = list()
+
+    label = train_df["label"].values
+    xmin = train_df["x"].values
+    ymin = train_df["y"].values
+    xmax = train_df["x_max"].values
+    ymax = train_df["y_max"].values
+    for i in range(len(train_df)):
+        if(i==0):
+            boxes = list()
+            labels = list()
+            difficulties = list()
+            boxes.append([xmin[i], ymin[i], xmax[i], ymax[i]])
+            labels.append(label[i])
+            difficulties.append(0)
+        elif (train_df["Path"][i]==train_df["Path"][i-1]):
+            boxes.append([xmin[i], ymin[i], xmax[i], ymax[i]])
+            labels.append(label[i])
+            difficulties.append(0)
+            if (i==len(train_df)):
+                if (i%5!=0):
+                    train_objects.append({'boxes': boxes, 'labels': labels, 'difficulties': difficulties})
+                    train_images.append(file_path+train_df["Path"][i])
+                else:
+                    test_objects.append({'boxes': boxes, 'labels': labels, 'difficulties': difficulties})
+                    test_images.append(file_path+train_df["Path"][i])
+        elif (train_df["Path"][i]!=train_df["Path"][i-1]):
+            if (i==len(train_df)):
+                if (i%5!=0):
+                    train_objects.append({'boxes': boxes, 'labels': labels, 'difficulties': difficulties})
+                    train_images.append(file_path+train_df["Path"][i-1])
+                else:
+                    test_objects.append({'boxes': boxes, 'labels': labels, 'difficulties': difficulties})
+                    test_images.append(file_path+train_df["Path"][i-1])
+            boxes = list()
+            labels = list()
+            difficulties = list()
+            boxes.append([xmin[i], ymin[i], xmax[i], ymax[i]])
+            labels.append(label[i])
+            difficulties.append(0)
+            if (i==len(train_df)):
+                if (i%5!=0):
+                    train_objects.append({'boxes': boxes, 'labels': labels, 'difficulties': difficulties})
+                    train_images.append(file_path+train_df["Path"][i])
+                else:
+                    test_objects.append({'boxes': boxes, 'labels': labels, 'difficulties': difficulties})
+                    test_images.append(file_path+train_df["Path"][i])
+        
+    print("Train:  ",len(train_images),len(train_objects))
+    # Save to file
+    with open(os.path.join(output_folder, 'TRAIN_images.json'), 'w') as j:
+        json.dump(train_images, j)
+    with open(os.path.join(output_folder, 'TRAIN_objects.json'), 'w') as j:
+        json.dump(train_objects, j ,cls=NumpyEncoder)
+    with open(os.path.join(output_folder, 'label_map.json'), 'w') as j:
+        json.dump(label_map, j) 
+        
+    print("Test: ",len(test_images),len(test_objects))
+    # Save to file
+    with open(os.path.join(output_folder, 'TEST_images.json'), 'w') as j:
+        json.dump(test_images, j)
+    with open(os.path.join(output_folder, 'TEST_objects.json'), 'w') as j:
+        json.dump(test_objects, j ,cls=NumpyEncoder)
+
 def decimate(tensor, m):
     """
     Decimate a tensor by a factor 'm', i.e. downsample by keeping every 'm'th value.
