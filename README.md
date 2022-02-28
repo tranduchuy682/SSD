@@ -1,3 +1,5 @@
+README.md from https://github.com/GivralNguyen/learn_computer_vision/tree/main/pytorch/object_detection/SSD
+
 This is a **[PyTorch](https://pytorch.org) Tutorial to Object Detection**.
 
 This is blatanly "borrowed" from [sgrvinod's great tutorial](https://github.com/sgrvinod/Deep-Tutorials-for-PyTorch) 
