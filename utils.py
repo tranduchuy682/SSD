@@ -272,13 +272,12 @@ def create_data_lists_split(file_path, output_folder):
                     test_objects.append({'boxes': boxes, 'labels': labels, 'difficulties': difficulties})
                     test_images.append(file_path+train_df["Path"][i])
         elif (train_df["Path"][i]!=train_df["Path"][i-1]):
-            if (i==len(train_df)):
-                if (i%5!=0):
-                    train_objects.append({'boxes': boxes, 'labels': labels, 'difficulties': difficulties})
-                    train_images.append(file_path+train_df["Path"][i-1])
-                else:
-                    test_objects.append({'boxes': boxes, 'labels': labels, 'difficulties': difficulties})
-                    test_images.append(file_path+train_df["Path"][i-1])
+            if (i%5!=0):
+                train_objects.append({'boxes': boxes, 'labels': labels, 'difficulties': difficulties})
+                train_images.append(file_path+train_df["Path"][i-1])
+            else:
+                test_objects.append({'boxes': boxes, 'labels': labels, 'difficulties': difficulties})
+                test_images.append(file_path+train_df["Path"][i-1])
             boxes = list()
             labels = list()
             difficulties = list()
