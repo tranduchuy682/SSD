@@ -8,7 +8,7 @@
 
 
 # """"for kaggle""""
-from utils import create_data_lists
+from utils import create_data_lists, create_data_lists_split
 
 create_data_lists_split('./AllDatabase','./')
 print("done create_data_lists_split.py")
