@@ -153,14 +153,21 @@ def create_data_lists(file_path, output_folder):
     xmax = train_df["x_max"].values
     ymax = train_df["y_max"].values
     for i in range(len(train_df)):
-        if (i>0) and (train_df["Path"][i]==train_df["Path"][i-1]):
+        if(i==0):
+            boxes = list()
+            labels = list()
+            difficulties = list()
+            boxes.append([xmin[i], ymin[i], xmax[i], ymax[i]])
+            labels.append(label[i])
+            difficulties.append(0)
+        elif (train_df["Path"][i]==train_df["Path"][i-1]):
             boxes.append([xmin[i], ymin[i], xmax[i], ymax[i]])
             labels.append(label[i])
             difficulties.append(0)
             if (i==len(train_df)):
                 train_objects.append({'boxes': boxes, 'labels': labels, 'difficulties': difficulties})
                 train_images.append(file_path+train_df["Path"][i])
-        elif((i>0) and (train_df["Path"][i]!=train_df["Path"][i-1])):
+        elif (train_df["Path"][i]!=train_df["Path"][i-1]):
             train_objects.append({'boxes': boxes, 'labels': labels, 'difficulties': difficulties})
             # print(train_objects)
             train_images.append(file_path+train_df["Path"][i-1])
@@ -173,13 +180,7 @@ def create_data_lists(file_path, output_folder):
             if (i==len(train_df)):
                 train_objects.append({'boxes': boxes, 'labels': labels, 'difficulties': difficulties})
                 train_images.append(file_path+train_df["Path"][i])
-        elif(i==0):
-            boxes = list()
-            labels = list()
-            difficulties = list()
-            boxes.append([xmin[i], ymin[i], xmax[i], ymax[i]])
-            labels.append(label[i])
-            difficulties.append(0)
+        
     print("Train:  ",len(train_images),len(train_objects))
     # Save to file
     with open(os.path.join(output_folder, 'TRAIN_images.json'), 'w') as j:
@@ -202,14 +203,21 @@ def create_data_lists(file_path, output_folder):
     xmax = test_df["x_max"].values
     ymax = test_df["y_max"].values
     for i in range(len(test_df)):
-        if (i>0) and (test_df["Path"][i]==test_df["Path"][i-1]):
+        if(i==0):
+            boxes = list()
+            labels = list()
+            difficulties = list()
+            boxes.append([xmin[i], ymin[i], xmax[i], ymax[i]])
+            labels.append(label[i])
+            difficulties.append(0)
+        elif (test_df["Path"][i]==test_df["Path"][i-1]):
             boxes.append([xmin[i], ymin[i], xmax[i], ymax[i]])
             labels.append(label[i])
             difficulties.append(0)
             if (i==len(test_df)):
                 test_objects.append({'boxes': boxes, 'labels': labels, 'difficulties': difficulties})
                 test_images.append(file_path+test_df["Path"][i])
-        elif((i>0) and (test_df["Path"][i]!=test_df["Path"][i-1])):
+        elif(test_df["Path"][i]!=test_df["Path"][i-1]):
             test_objects.append({'boxes': boxes, 'labels': labels, 'difficulties': difficulties})
             # print(train_objects)
             test_images.append(file_path+test_df["Path"][i-1])
@@ -222,13 +230,7 @@ def create_data_lists(file_path, output_folder):
             if (i==len(test_df)):
                 test_objects.append({'boxes': boxes, 'labels': labels, 'difficulties': difficulties})
                 test_images.append(file_path+test_df["Path"][i])
-        elif(i==0):
-            boxes = list()
-            labels = list()
-            difficulties = list()
-            boxes.append([xmin[i], ymin[i], xmax[i], ymax[i]])
-            labels.append(label[i])
-            difficulties.append(0)
+        
     print("Test: ",len(test_images),len(test_objects))
     # Save to file
     with open(os.path.join(output_folder, 'TEST_images.json'), 'w') as j:
