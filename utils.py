@@ -244,6 +244,8 @@ def create_data_lists_split(file_path, output_folder):
 
     train_images = list()
     train_objects = list()
+    test_images = list()
+    test_objects = list()
 
     label = train_df["label"].values
     xmin = train_df["x"].values
