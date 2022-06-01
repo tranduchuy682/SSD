@@ -2,7 +2,8 @@ import time
 import torch.backends.cudnn as cudnn
 import torch.optim
 import torch.utils.data
-from model import SSD300, MultiBoxLoss
+# from model_vgg16 import SSD300, MultiBoxLoss
+from model_mobilenetv3 import SSD300, MultiBoxLoss
 from datasets import PascalVOCDataset
 from utils import *
 
