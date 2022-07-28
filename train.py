@@ -1,11 +1,34 @@
 import time
+from argparse import ArgumentParser
 import torch.backends.cudnn as cudnn
 import torch.optim
 import torch.utils.data
+import tqdm
 # from model_vgg16 import SSD300, MultiBoxLoss
-from model_mobilenetv3 import SSD300, MultiBoxLoss
+# from model_mobilenetv3 import SSD300, MultiBoxLoss
+# from model_resnet18 import SSD300, MultiBoxLoss
 from datasets import PascalVOCDataset
 from utils import *
+parser = ArgumentParser(description='Input backbone')
+parser.add_argument('bb', help='Nhap ten backbone')
+parser.add_argument('epoch', help='Nhap so epoch')
+args = parser.parse_args()
+backbone = args.bb
+train_epoch = args.epoch
+
+
+if backbone == "resnet18":
+    print('Running backbone ResNet18')
+    from model_resnet18 import SSD300, MultiBoxLoss
+elif backbone == "mobilenetv3":
+    print('Running backbone MobileNetV3')
+    from model_mobilenetv3 import SSD300, MultiBoxLoss
+else:
+    print('Running backbone VGG16')
+    backbone = 'vgg16'
+    from model_vgg16 import SSD300, MultiBoxLoss
+
+
 
 # Data parameters
 data_folder = './'  # folder with data files
@@ -17,12 +40,11 @@ n_classes = len(label_map)  # number of different types of objects
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Learning parameters
-# checkpoint = 'checkpoint_ssd300.pth.tar' #None  # path to model checkpoint, None if none
-checkpoint = None  # path to model checkpoint, None if none
+checkpoint = '/home/mcn/DucHuy_K63/SSD/SSD-base/weight/checkpoint_ssd300'+backbone+'.pth.tar' #None  # path to model checkpoint, None if none
+# checkpoint = None  # path to model checkpoint, None if none
 batch_size = 8  # batch size
 iterations = 120000  # number of iterations to train
 workers = 2 #4  # number of workers for loading data in the DataLoader
-print_freq = 200  # print training status every __ batches
 lr = 1e-3  # learning rate
 decay_lr_at = [1000*i for i in range(1,120)] #[80000, 100000]  # decay learning rate after these many iterations
 decay_lr_to =  0.3 #0.1  # decay learning rate to this fraction of the existing learning rate
@@ -79,16 +101,15 @@ def main():
     # Calculate total number of epochs to train and the epochs to decay learning rate at (i.e. convert iterations to epochs)
     # To convert iterations to epochs, divide iterations by the number of iterations per epoch
     # The paper trains for 120,000 iterations with a batch size of 32, decays after 80,000 and 100,000 iterations
-    epochs = iterations // (len(train_dataset) // 32)
+    # epochs = iterations // (len(train_dataset) // 32)
     decay_lr_at = [it // (len(train_dataset) // 32) for it in decay_lr_at]
 
     # Epochs
-    for epoch in range(start_epoch, epochs):
+    for epoch in range(start_epoch, start_epoch+int(train_epoch)):
 
         # Decay learning rate at particular epochs
         if epoch in decay_lr_at:
             adjust_learning_rate(optimizer, decay_lr_to)
-
         # One epoch's training
         train(train_loader=train_loader,
               model=model,
@@ -97,7 +118,7 @@ def main():
               epoch=epoch, _loss=_loss)
 
         # Save checkpoint
-        save_checkpoint(epoch, model, optimizer, _loss)
+        save_checkpoint(epoch, model, optimizer, _loss, backbone)
 
 
 def train(train_loader, model, criterion, optimizer, epoch, _loss):
@@ -112,15 +133,11 @@ def train(train_loader, model, criterion, optimizer, epoch, _loss):
     """
     model.train()  # training mode enables dropout
 
-    batch_time = AverageMeter()  # forward prop. + back prop. time
-    data_time = AverageMeter()  # data loading time
     losses = AverageMeter()  # loss
 
-    start = time.time()
 
     # Batches
-    for i, (images, boxes, labels, _) in enumerate(train_loader):
-        data_time.update(time.time() - start)
+    for (images, boxes, labels, _) in tqdm.tqdm(train_loader):
 
         # Move to default device
         images = images.to(device)  # (batch_size (N), 3, 300, 300)
@@ -145,18 +162,12 @@ def train(train_loader, model, criterion, optimizer, epoch, _loss):
         optimizer.step()
 
         losses.update(loss.item(), images.size(0))
-        batch_time.update(time.time() - start)
 
-        start = time.time()
 
         # Print status
-        if i % print_freq == 0:
-            print('Epoch: [{0}][{1}/{2}]\t'
-                  'Batch Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
-                  'Data Time {data_time.val:.3f} ({data_time.avg:.3f})\t'
-                  'Loss {loss.val:.4f} ({loss.avg:.4f})\t'.format(epoch, i, len(train_loader),
-                                                                  batch_time=batch_time,
-                                                                  data_time=data_time, loss=losses))
+        # if i % len(train_loader) == 0:
+    print('Epoch: [{0}]\t'
+        'Loss {loss.val:.4f} ({loss.avg:.4f})\t'.format(epoch,loss=losses))
     del predicted_locs, predicted_scores, images, boxes, labels  # free some memory since their histories may be stored
 
 
