@@ -12,15 +12,8 @@ keep_difficult = True  # difficult ground truth objects must always be considere
 batch_size = 64
 workers = 4
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-checkpoint = './checkpoint_ssd300.pth.tar'
+backbones = ["mobilenetv3","resnet18","vgg16"]
 
-# Load model checkpoint that is to be evaluated
-checkpoint = torch.load(checkpoint)
-model = checkpoint['model']
-model = model.to(device)
-
-# Switch to eval mode
-model.eval()
 
 # Load test data
 test_dataset = PascalVOCDataset(data_folder,
@@ -30,7 +23,7 @@ test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, s
                                           collate_fn=test_dataset.collate_fn, num_workers=workers, pin_memory=True)
 
 
-def evaluate(test_loader, model):
+def evaluate(test_loader, model, epoch):
     """
     Evaluate.
 
@@ -81,8 +74,18 @@ def evaluate(test_loader, model):
     # Print AP for each class
     pp.pprint(APs)
 
-    print('\nMean Average Precision (mAP): %.3f' % mAP)
+    print('\nMean Average Precision (mAP) of ' + backbone + '(' + str(epoch) + ' epochs): %.3f' % mAP)
 
 
 if __name__ == '__main__':
-    evaluate(test_loader, model)
+    for backbone in backbones:
+        checkpoint = '/home/mcn/DucHuy_K63/Det/SSD-base/weight/checkpoint_ssd300'+backbone+'.pth.tar'
+        # Load model checkpoint that is to be evaluated
+        checkpoint = torch.load(checkpoint)
+        model = checkpoint['model']
+        epoch = checkpoint['epoch']
+        model = model.to(device)
+
+        # Switch to eval mode
+        model.eval()
+        evaluate(test_loader, model, epoch)

@@ -2,17 +2,25 @@ from torchvision import transforms
 from utils import *
 from PIL import Image, ImageDraw, ImageFont
 from IPython.display import display
+from datetime import datetime
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+backbones = ['mobilenetv3','resnet18','vgg16']
+# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device = torch.device("cpu")
 # Load model checkpoint
-checkpoint = 'checkpoint_ssd300.pth.tar'
-checkpoint = torch.load(checkpoint)
-start_epoch = checkpoint['epoch'] + 1
-print('\nLoaded checkpoint from epoch %d.\n' % start_epoch)
-model = checkpoint['model']
-model = model.to(device)
-model.eval()
+models = {}
+for bb in backbones:
+    checkpoint = '/home/mcn/DucHuy_K63/Det/SSD-base/weight/checkpoint_ssd300'+bb+'.pth.tar'
+    checkpoint = torch.load(checkpoint, map_location={'cuda:0': 'cpu'})
+    # checkpoints.append(checkpoint)
+    model = checkpoint['model']
+    model = model.to(device)
+    model.eval()
+    models[bb] = model
+# start_epoch = checkpoint['epoch'] + 1
+# print('\nLoaded checkpoint from epoch %d.\n' % start_epoch)
+
 
 # Transforms
 resize = transforms.Resize((300, 300))
@@ -21,18 +29,19 @@ normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                  std=[0.229, 0.224, 0.225])
 
 
-def detect(original_image, min_score, max_overlap, top_k, suppress=None):
+def detect(input_image, min_score, max_overlap, top_k, bb, suppress=None):
     """
     Detect objects in an image with a trained SSD300, and visualize the results.
 
-    :param original_image: image, a PIL Image
+    :param input_image: image, a PIL Image
     :param min_score: minimum threshold for a detected box to be considered a match for a certain class
     :param max_overlap: maximum overlap two boxes can have so that the one with the lower score is not suppressed via Non-Maximum Suppression (NMS)
     :param top_k: if there are a lot of resulting detection across all classes, keep only the top 'k'
     :param suppress: classes that you know for sure cannot be in the image or you do not want in the image, a list
-    :return: annotated image, a PIL Image
+    :return: annotated image, 3 PIL Image
     """
-
+    original_image = input_image
+    model = models[bb]
     # Transform
     image = normalize(to_tensor(resize(original_image)))
 
@@ -43,9 +52,10 @@ def detect(original_image, min_score, max_overlap, top_k, suppress=None):
     predicted_locs, predicted_scores = model(image.unsqueeze(0))
 
     # Detect objects in SSD output
+    start=datetime.now()
     det_boxes, det_labels, det_scores = model.detect_objects(predicted_locs, predicted_scores, min_score=min_score,
-                                                             max_overlap=max_overlap, top_k=top_k)
-
+                                                            max_overlap=max_overlap, top_k=top_k)
+    runtime = datetime.now()-start
     # Move detections to the CPU
     det_boxes = det_boxes[0].to('cpu')
 
@@ -90,14 +100,16 @@ def detect(original_image, min_score, max_overlap, top_k, suppress=None):
                             box_location[1]]
         draw.rectangle(xy=textbox_location, fill=label_color_map[det_labels[i]])
         draw.text(xy=text_location, text=det_labels[i].upper(), fill='white',
-                  font=font)
+                font=font)
     del draw
+    return annotated_image, runtime
 
-    return annotated_image
 
-
-if __name__ == '__main__':
-    img_path = './AllDatabase/LISCDatabase/Main Dataset/lymp/11.bmp'
-    original_image = Image.open(img_path, mode='r')
-    original_image = original_image.convert('RGB')
-    display(detect(original_image, min_score=0.2, max_overlap=0.5, top_k=200)) #.show()
+# if __name__ == '__main__':
+#     img_path = './AllDatabase/LISCDatabase/Main Dataset/lymp/11.bmp'
+#     original_image = Image.open(img_path, mode='r')
+#     original_image = original_image.convert('RGB')
+#     # display(detect(original_image, min_score=0.2, max_overlap=0.5, top_k=200)) .show()
+#     annotated_images = detect(original_image, min_score=0.2, max_overlap=0.5, top_k=200)
+#     for bb in annotated_images:
+#         annotated_images[bb].save("output/annotated_image_"+bb+".jpg")

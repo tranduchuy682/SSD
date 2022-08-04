@@ -6,7 +6,8 @@ from itertools import product as product
 from torch.nn import init
 import logging
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device = torch.device("cpu")
      
         
   

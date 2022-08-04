@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href='/staticFiles/main.css' />
+  </head>
+  <body>
+    <h1>Load Image</h1>
+    <!-- <p>Show CSV file in html using FLASK</p> -->
+ 
+    <form method="POST" enctype="multipart/form-data" action="/">
+        <input type="file" id="myFile" name="uploaded-file" accept=".jpg">
+        <input type="submit" value="Submit">
+    </form>
+  <br>
+  <p style="color:blue;">Choose Image file to upload <br> Only .png, .jpg, .jpeg, .bmp format allowed</p>
+  <form action="/show_data" target="_blank">
+        <input type="submit" value="Show Image" />
+    </form>
+  </body>
+</html>

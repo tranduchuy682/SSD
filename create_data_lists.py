@@ -8,8 +8,13 @@
 
 
 # """"for kaggle""""
-from utils import create_data_lists
+# from utils import create_data_lists
 
-create_data_lists('./AllDatabase',
-                  './')
-print("done create_data_lists.py")
+# create_data_lists('./AllDatabase',
+#                   './')
+# print("done create_data_lists.py")
+
+from utils import create_data_lists_split
+
+create_data_lists_split('/home/mcn/DucHuy_K63/Det/SSD-base/AllDatabase','/home/mcn/DucHuy_K63/Det/SSD-base')
+print("done create_data_lists_split.py")

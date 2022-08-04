@@ -140,6 +140,8 @@ rev_label_map = {v: k for k, v in label_map.items()}  # Inverse mapping
 # Color map for bounding boxes of detected objects from https://sashat.me/2017/01/11/list-of-20-simple-distinct-colors/
 distinct_colors = ['#911eb4','#000000', '#e6194B', '#4363d8', '#000075', '#f58231']
 label_color_map = {k: distinct_colors[i] for i, k in enumerate(label_map.keys())}
+
+
 def create_data_lists(file_path, output_folder):
     file_path = os.path.abspath(file_path)
     train_df = pd.read_csv(f"{file_path}/train_bbox.csv")
@@ -737,7 +739,7 @@ def resize(image, boxes, dims=(300, 300), return_percent_coords=True):
 def photometric_distort(image):
     """
     Distort brightness, contrast, saturation, and hue, each with a 50% chance, in random order.
-
+    
     :param image: image, a PIL Image
     :return: distorted image
     """
@@ -851,7 +853,7 @@ def accuracy(scores, targets, k):
     return correct_total.item() * (100.0 / batch_size)
 
 
-def save_checkpoint(epoch, model, optimizer, _loss):
+def save_checkpoint(epoch, model, optimizer, _loss, backbone):
     """
     Save model checkpoint.
 
@@ -863,7 +865,7 @@ def save_checkpoint(epoch, model, optimizer, _loss):
              'model': model,
              'optimizer': optimizer,
              '_loss': _loss}
-    filename = 'checkpoint_ssd300.pth.tar'
+    filename = '/home/mcn/DucHuy_K63/SSD/SSD-base/weight/checkpoint_ssd300'+backbone+'.pth.tar'
     torch.save(state, filename)
 
 

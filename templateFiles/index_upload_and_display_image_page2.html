@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href='/staticFiles/main.css' />
+  </head>
+  <body>
+    <h1>Load Image</h1>
+    <!-- <p>Show CSV file in html using FLASK</p> -->
+ 
+    <form method="POST" enctype="multipart/form-data" action="/">
+        <input type="file" id="myFile" name="uploaded-file" accept=".jpg">
+        <input type="submit" value="Submit">
+    </form>
+  <br>
+  <p style="color:green;">file uploaded successfully</p>
+  <img src="{{ user_image }}" alt="Italian Trulli" width="500" height="400">
+  <form action="/detect_object" target="_blank">
+        <input type="submit" value="Detect object" />
+    </form>
+  </body>
+</html>
