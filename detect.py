@@ -58,7 +58,7 @@ def detect(input_image, min_score, max_overlap, top_k, bb, suppress=None):
     runtime = datetime.now()-start
     # Move detections to the CPU
     det_boxes = det_boxes[0].to('cpu')
-
+    det_scores = det_scores[0].to('cpu')
     # Transform to original image dimensions
     original_dims = torch.FloatTensor(
         [original_image.width, original_image.height, original_image.width, original_image.height]).unsqueeze(0)
@@ -94,12 +94,12 @@ def detect(input_image, min_score, max_overlap, top_k, bb, suppress=None):
         #     det_labels[i]])  # a fourth rectangle at an offset of 1 pixel to increase line thickness
 
         # Text
-        text_size = font.getsize(det_labels[i].upper())
+        text_size = font.getsize(det_labels[i].upper()+ ': ' + str(det_scores[i].item()))
         text_location = [box_location[0] + 2., box_location[1] - text_size[1]]
         textbox_location = [box_location[0], box_location[1] - text_size[1], box_location[0] + text_size[0] + 4.,
                             box_location[1]]
         draw.rectangle(xy=textbox_location, fill=label_color_map[det_labels[i]])
-        draw.text(xy=text_location, text=det_labels[i].upper(), fill='white',
+        draw.text(xy=text_location, text=det_labels[i].upper() + ': ' + str(det_scores[i].item()), fill='white',
                 font=font)
     del draw
     return annotated_image, runtime
