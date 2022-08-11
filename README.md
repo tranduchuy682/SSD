@@ -17,7 +17,8 @@ pip install -r requirement.txt
 ---
 # Get dataset
 - Format
-├── AllDatabase \n
+```
+├── AllDatabase
 |  └── BCCD Database
 |  └── LISCDatabase
 |       └── Ground Truth Segmentation
@@ -31,7 +32,7 @@ pip install -r requirement.txt
 ├── train.py
 ├── utils.py
 ...
-
+```
 ```
 cd SSD
 git clone https://github.com/tranduchuy682/AllDatabase.git
