@@ -121,7 +121,7 @@
 
 #     print('\nThere are %d test images containing a total of %d objects. Files have been saved to %s.' % (
 #         len(test_images), n_objects, os.path.abspath(output_folder)))
-`import json
+import json
 import os
 import torch
 import random
@@ -865,7 +865,7 @@ def save_checkpoint(epoch, model, optimizer, _loss, backbone):
              'model': model,
              'optimizer': optimizer,
              '_loss': _loss}
-    filename = '/home/mcn/DucHuy_K63/SSD/SSD-base/weight/checkpoint_ssd300'+backbone+'.pth.tar'
+    filename = 'weight/checkpoint_ssd300'+backbone+'.pth.tar'
     torch.save(state, filename)
 
 

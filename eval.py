@@ -84,7 +84,7 @@ def evaluate(test_loader, model, epoch):
 
 if __name__ == '__main__':
     for backbone in backbones:
-        checkpoint = '/home/mcn/DucHuy_K63/Det/SSD-base/weight/checkpoint_ssd300'+backbone+'.pth.tar'
+        checkpoint = 'weight/checkpoint_ssd300'+backbone+'.pth.tar'
         # Load model checkpoint that is to be evaluated
         checkpoint = torch.load(checkpoint)
         model = checkpoint['model']

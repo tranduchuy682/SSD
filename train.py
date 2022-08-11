@@ -40,7 +40,7 @@ n_classes = len(label_map)  # number of different types of objects
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Learning parameters
-checkpoint = '/home/mcn/DucHuy_K63/SSD/SSD-base/weight/checkpoint_ssd300'+backbone+'.pth.tar' #None  # path to model checkpoint, None if none
+checkpoint = 'weight/checkpoint_ssd300'+backbone+'.pth.tar' #None  # path to model checkpoint, None if none
 # checkpoint = None  # path to model checkpoint, None if none
 batch_size = 8  # batch size
 iterations = 120000  # number of iterations to train

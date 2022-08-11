@@ -1,6 +1,6 @@
+# White Blood Cell Detection and Classification using Single Shot Multibox Detector and Deployment
 
-
-
+---
 This is a **[PyTorch](https://pytorch.org) Tutorial to Object Detection**.
 
 This is blatanly "borrowed" from [sgrvinod's great tutorial](https://github.com/sgrvinod/Deep-Tutorials-for-PyTorch) 
@@ -16,6 +16,7 @@ pip install -r requirements.txt
 
 ---
 # Get dataset
+- The dataset can be downloaded or cloneed from [***my other repo***](https://github.com/tranduchuy682/AllDatabase.git)
 - Format
 ```
 ├── AllDatabase

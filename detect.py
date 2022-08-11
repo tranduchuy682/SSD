@@ -11,7 +11,7 @@ device = torch.device("cpu")
 # Load model checkpoint
 models = {}
 for bb in backbones:
-    checkpoint = '/home/mcn/DucHuy_K63/Det/SSD-base/weight/checkpoint_ssd300'+bb+'.pth.tar'
+    checkpoint = 'weight/checkpoint_ssd300'+bb+'.pth.tar'
     checkpoint = torch.load(checkpoint, map_location={'cuda:0': 'cpu'})
     # checkpoints.append(checkpoint)
     model = checkpoint['model']
