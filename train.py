@@ -7,7 +7,7 @@ import tqdm
 # from model_vgg16 import SSD300, MultiBoxLoss
 # from model_mobilenetv3 import SSD300, MultiBoxLoss
 # from model_resnet18 import SSD300, MultiBoxLoss
-from datasets import PascalVOCDataset
+from datasets import CombinedWBCDataset
 from utils import *
 parser = ArgumentParser(description='Input backbone')
 parser.add_argument('bb', help='Nhap ten backbone')
@@ -91,7 +91,7 @@ def main():
     criterion = MultiBoxLoss(priors_cxcy=model.priors_cxcy).to(device)
 
     # Custom dataloaders
-    train_dataset = PascalVOCDataset(data_folder,
+    train_dataset = CombinedWBCDataset(data_folder,
                                      split='train',
                                      keep_difficult=keep_difficult)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True,

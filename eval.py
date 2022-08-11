@@ -1,5 +1,5 @@
 from utils import *
-from datasets import PascalVOCDataset
+from datasets import CombinedWBCDataset
 from tqdm import tqdm
 from pprint import PrettyPrinter
 from datetime import datetime
@@ -18,7 +18,7 @@ backbones = ["mobilenetv3","resnet18","vgg16"]
 
 
 # Load test data
-test_dataset = PascalVOCDataset(data_folder,
+test_dataset = CombinedWBCDataset(data_folder,
                                 split='test',
                                 keep_difficult=keep_difficult)
 test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, shuffle=False,
