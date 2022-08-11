@@ -17,7 +17,7 @@ pip install -r requirement.txt
 ---
 # Get dataset
 - Format
-├── AllDatabase
+├── AllDatabase \n
 |  └── BCCD Database
 |  └── LISCDatabase
 |       └── Ground Truth Segmentation
