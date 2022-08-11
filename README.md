@@ -34,7 +34,6 @@ pip install -r requirement.txt
 ...
 ```
 ```
-cd SSD
 git clone https://github.com/tranduchuy682/AllDatabase.git
 ```
 
