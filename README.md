@@ -16,6 +16,22 @@ pip install -r requirement.txt
 
 ---
 # Get dataset
+- Format
+├── AllDatabase
+|  └── BCCD Database
+|  └── LISCDatabase
+|       └── Ground Truth Segmentation
+|       └── Main Dataset
+|       └── More Dataset without Ground Truth/alll
+|  └── RaabinDatabase
+|       └── GrTh
+|       └── TestA
+|       └── TestB/Test-B
+|       └── Train
+├── train.py
+├── utils.py
+...
+
 ```
 cd SSD
 git clone https://github.com/tranduchuy682/AllDatabase.git
