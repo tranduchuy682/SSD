@@ -21,9 +21,9 @@ pip install -r requirement.txt
 ├── AllDatabase
 |  └── BCCD Database
 |  └── LISCDatabase
-|       └── Ground Truth Segmentation
-|       └── Main Dataset
-|       └── More Dataset without Ground Truth/alll
+|  |    └── Ground Truth Segmentation
+|  |    └── Main Dataset
+|  |    └── More Dataset without Ground Truth/alll
 |  └── RaabinDatabase
 |       └── GrTh
 |       └── TestA
