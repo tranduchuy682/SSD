@@ -11,7 +11,7 @@ Basic knowledge of PyTorch, convolutional neural networks is assumed.
 # Set up
 ```
 git clone https://github.com/tranduchuy682/SSD.git
-pip install -r requirement.txt
+pip install -r requirements.txt
 ```
 
 ---
