@@ -16,7 +16,7 @@ pip install -r requirements.txt
 
 ---
 # Get dataset
-- The dataset can be downloaded or cloneed from [***my other repo***](https://github.com/tranduchuy682/AllDatabase.git)
+- The dataset can be downloaded or cloned from [***my other repo***](https://github.com/tranduchuy682/AllDatabase.git)
 - Format
 ```
 ├── AllDatabase
