@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href='/staticFiles/main.css' />
+  </head>
+  <body>
+    <h1>White Blood Cells Detection And Classification</h1>
+    <p>Detect object in image</p>
+ 
+<div class="container">
+  <div class="small-container">
+    <img src="{{ user_image }}" alt="MobilenetV3" width="500" height="400"/>
+  </div>
+  <div class="small-container">
+    <img src="{{ user_image }}" alt="Resnet18*" width="500" height="400"/>
+  </div>
+    <div class="small-container">
+    <img src="{{ user_image }}" alt="VGG16" width="500" height="400"/>
+  </div>
+  </div>
+<br>
+    <br>
+  <!-- <form action="/detect_object" target="_blank">
+        <input type="submit" value="Detect Object" />
+    </form> -->
+    </body>
+</html>
